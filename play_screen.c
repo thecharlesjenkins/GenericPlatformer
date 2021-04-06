@@ -2,7 +2,7 @@
 
 // int surfaces[][] = {{}};
 void draw_play_screen(u32 previousButtons, u32 currentButtons) {
-  static object dog = {shadow, 50, 150, 10, 0, 0, 100};
+  static object dog = {shadow, 50, 150, 10, 0, 1, 100};
   static play state = {0, 0, 5};
 
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {

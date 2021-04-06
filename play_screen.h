@@ -10,7 +10,6 @@ extern int gravity;
 extern u32 vBlankCounter;
 
 void draw_play_screen(u32, u32);
-void move(object *obj, int y, int x, int next_y, int next_x);
 
 typedef struct play {
   int delay;
@@ -27,5 +26,7 @@ typedef struct object {
   int facing;
   int health;
 } object;
+
+void move(object *obj, int y, int x, int next_y, int next_x);
 
 #endif
