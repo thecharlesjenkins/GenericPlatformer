@@ -1,64 +1,59 @@
 #include "play_screen.h"
 
-play play_state;
-
 // int surfaces[][] = {{}};
-
-void initialize_play_screen(void) {
-  play state = {shadow, 0, 0, 5, 1, 50, 150, 10, 0};
-  play_state = state;
-}
-
 void draw_play_screen(u32 previousButtons, u32 currentButtons) {
+  static object dog = {shadow, 50, 150, 10, 0, 0, 100};
+  static play state = {0, 0, 5};
+
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
-    play_state.facing = 0;
-    play_state.dx = 1;
+    dog.facing = 0;
+    dog.dx = 1;
   } else if (KEY_DOWN(BUTTON_RIGHT, currentButtons)) {
-    play_state.facing = 1;
-    play_state.dx = -1;
+    dog.facing = 1;
+    dog.dx = -1;
   } else {
-    play_state.dx = 0;
+    dog.dx = 0;
   }
 
-  if (KEY_JUST_PRESSED(BUTTON_UP, currentButtons, previousButtons) && play_state.dy == 0) {
-    play_state.dy = 10;
+  if (KEY_JUST_PRESSED(BUTTON_UP, currentButtons, previousButtons) && dog.dy == 0) {
+    dog.dy = 10;
   }
 
-  play_state.dy += gravity;
-  int next_loc_y = play_state.y - play_state.dy;
-  int next_loc_x = play_state.x - play_state.dx;
+  dog.dy += gravity;
+  int next_loc_y = dog.y - dog.dy;
+  int next_loc_x = dog.x - dog.dx;
 
-  move(play_state.y, play_state.x, next_loc_y, next_loc_x);
+  move(&dog, dog.y, dog.x, next_loc_y, next_loc_x);
 
-  play_state.dog->attr0 = play_state.y | DOG_PALETTE_TYPE | DOG_SPRITE_SHAPE;
-  play_state.dog->attr1 =
-      play_state.x | DOG_SPRITE_SIZE | (play_state.facing << 12);
+  dog.sprite->attr0 = dog.y | DOG_PALETTE_TYPE | DOG_SPRITE_SHAPE;
+  dog.sprite->attr1 =
+      dog.x | DOG_SPRITE_SIZE | (dog.facing << 12);
 
   if (KEY_DOWN((BUTTON_LEFT | BUTTON_RIGHT), currentButtons)) {
-    play_state.dog->attr2 =
-        play_state.frame << 12 | dog_frames[play_state.frame];
+    dog.sprite->attr2 =
+        state.frame << 12 | dog_frames[state.frame];
 
-    if (play_state.delay > play_state.frame_delay) {
-      play_state.delay = 0;
-      play_state.frame = (play_state.frame + 1) % DOG_FRAMES;
+    if (state.delay > state.frame_delay) {
+      state.delay = 0;
+      state.frame = (state.frame + 1) % DOG_FRAMES;
     }
-    (play_state.delay)++;
+    (state.delay)++;
   } else {
-    play_state.delay = 0;
-    play_state.frame = 4;
+    state.delay = 0;
+    state.frame = 4;
   }
 
-  int frame_ptr = dog_frames[play_state.frame];
-  play_state.dog->attr2 = play_state.frame << 12 | frame_ptr;
+  int frame_ptr = dog_frames[state.frame];
+  dog.sprite->attr2 =state.frame << 12 | frame_ptr;
 }
 
-void move(int y, int x, int next_y, int next_x) {
+void move(object *obj, int y, int x, int next_y, int next_x) {
   if (y <= (HEIGHT - 32) && next_y > (HEIGHT - 32)) {
-    play_state.dy = 0;
-    play_state.y = (HEIGHT - 32);
+    obj->dy = 0;
+    obj->y = (HEIGHT - 32);
   } else {
-    play_state.y = next_y;
+    obj->y = next_y;
   }
-  play_state.x = next_x;
+  obj->x = next_x;
   UNUSED(x);
 }

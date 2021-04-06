@@ -10,8 +10,6 @@
 #include "images/dog.h"
 #include "images/night.h"
 
-// extern struct play_state play_screen_state;
-
 void draw_welcome_screen(void);
 void initialize_screen(void);
 

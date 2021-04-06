@@ -79,6 +79,4 @@ void initialize_screen(void) {
   for (int i = 0; i < 128; i++) {
     shadow[i].attr0 = ATTR0_HIDE;
   }
-
-  initialize_play_screen();
 }
