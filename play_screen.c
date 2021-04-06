@@ -1,6 +1,14 @@
 #include "play_screen.h"
 
-// int surfaces[][] = {{}};
+int floor_col_func(struct point *start, struct point *end, int *play_object);
+int floor_col_func(struct point *start, struct point *end, int *play_object) {
+ 
+}
+
+struct collision collisions[] = {
+
+};
+
 void draw_play_screen(u32 previousButtons, u32 currentButtons) {
   static object dog = {shadow, 50, 150, 10, 0, 1, 100};
   static play state = {0, 0, 5};

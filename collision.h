@@ -8,12 +8,9 @@ struct point {
     int y;
 };
 
-typedef int (*collision_func)(struct point *start, struct point *end);
-
-typedef int (*collision_action)(int *play_object);
+typedef int (*collision_action)(struct point *start, struct point *end, int *play_object);
 
 struct collision {
-    collision_func *func;
     collision_action *action;
     struct point start;
     struct point end;
