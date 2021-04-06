@@ -14,6 +14,8 @@
 
 void draw_welcome_screen(void);
 void initialize_screen(void);
+
+int gravity = -1;
 /*
 * For example, for a Snake game, one could be:
 *

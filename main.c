@@ -33,7 +33,7 @@ int main(void) {
       }
       break;
     case PLAY:
-      draw_play_screen();
+      draw_play_screen(previousButtons, currentButtons);
       break;
     case WIN:
 
