@@ -1,38 +1,5 @@
 #include "play_screen.h"
 
-/*
-  0
-  0
-  0
-  0
-  dy
-  dx
-  y
-  x
-*/
-u8 floor_col_func(struct point *start, struct point *end, struct object *obj);
-u8 floor_col_func(struct point *start, struct point *end, struct object *obj) {
-  if (start->y <= (HEIGHT - 32) && end->y > (HEIGHT - 32)) {
-    obj->dy = 0;
-    obj->loc.y = (HEIGHT - 32);
-    return (1 << 1) | (1 << 3); // dy and y were set 00001010
-  }
-  return 0; // Nothing was set
-}
-
-/*
-struct collision {
-    collision_action *action;
-    struct point start;
-    struct point end;
-};
-*/
-int collision_size = 2;
-struct collision collisions[] = {
-    {floor_col_func, {0, WIDTH}, {HEIGHT, WIDTH}},
-    {floor_col_func, {0, WIDTH}, {HEIGHT, WIDTH}}
-    };
-
 void draw_play_screen(u32 previousButtons, u32 currentButtons) {
   static struct object dog = {shadow, {50, 150}, 10, 0, 1, 100};
   static play state = {0, 0, 5};
@@ -59,18 +26,22 @@ void draw_play_screen(u32 previousButtons, u32 currentButtons) {
   for (int i = 0; i < collision_size; i++) {
     pos_bitmask |= (*collisions[i].action)(&dog.loc, &next_pos, &dog);
   }
+  drawRectDMA(collisions[3].start.y, collisions[3].start.x, collisions[3].end.x - collisions[3].start.x, 1, WHITE);
+  drawRectDMA(collisions[2].start.y, collisions[2].start.x, collisions[2].end.x - collisions[2].start.x, 1, WHITE);
 
   if ((1 & pos_bitmask) == 0) {
-    //x not changed
+    // x not changed
     dog.loc.x = next_pos.x;
   }
   if ((2 & pos_bitmask) == 0) {
-    //y not changed
+    // y not changed
     dog.loc.y = next_pos.y;
   }
 
   dog.sprite->attr0 = dog.loc.y | DOG_PALETTE_TYPE | DOG_SPRITE_SHAPE;
   dog.sprite->attr1 = dog.loc.x | DOG_SPRITE_SIZE | (dog.facing << 12);
+
+  setPixel(dog.loc.y, dog.loc.x, WHITE);
 
   if (KEY_DOWN((BUTTON_LEFT | BUTTON_RIGHT), currentButtons)) {
     dog.sprite->attr2 = state.frame << 12 | dog_frames[state.frame];

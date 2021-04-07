@@ -8,6 +8,8 @@
 extern OamEntry shadow[128];
 extern int gravity;
 extern u32 vBlankCounter;
+extern struct collision collisions[];
+extern int collision_size;
 
 void draw_play_screen(u32, u32);
 
