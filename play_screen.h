@@ -17,16 +17,4 @@ typedef struct play {
   int frame_delay;
 } play;
 
-typedef struct object {
-  OamEntry *sprite;
-  int x;
-  int y;
-  int dy;
-  int dx;
-  int facing;
-  int health;
-} object;
-
-void move(object *obj, int y, int x, int next_y, int next_x);
-
 #endif
