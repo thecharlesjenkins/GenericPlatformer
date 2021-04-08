@@ -11,12 +11,13 @@ extern u32 vBlankCounter;
 extern struct collision collisions[];
 extern int collision_size;
 
-void draw_play_screen(u32, u32);
 
 typedef struct play {
   int delay;
   int frame;
   int frame_delay;
 } play;
+
+int draw_play_screen(u32, u32, struct object *, struct play *);
 
 #endif

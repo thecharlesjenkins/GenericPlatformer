@@ -15,6 +15,7 @@ struct object {
   int dx;
   int facing;
   int health;
+  int lives;
 };
 
 /*

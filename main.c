@@ -1,5 +1,5 @@
 #include "main.h"
-#include "play_screen.h"
+#include "images/octopus.h"
 
 OamEntry shadow[128];
 
@@ -8,7 +8,11 @@ enum gba_state {
   PLAY,
   WIN,
   LOSE,
+  LOSE_SHOW,
 };
+
+struct object dog_sprite;
+struct play play_state;
 
 int main(void) {
   // Save current and previous state of button input.
@@ -19,10 +23,17 @@ int main(void) {
   enum gba_state state = START;
 
   initialize_screen();
+  dog_sprite = default_dog;
+  play_state = default_state;
 
   while (1) {
     waitForVBlank();
     currentButtons = BUTTONS; // Load the current state of the buttons
+
+    if (KEY_DOWN(BUTTON_SELECT, currentButtons)) {
+      state = START;
+      reset_screen();
+    }
 
     switch (state) {
     case START:
@@ -32,17 +43,30 @@ int main(void) {
         drawFullScreenImageDMA(night);
       }
       break;
-    case PLAY:
-      draw_play_screen(previousButtons, currentButtons);
+    case PLAY: {
+      int result = draw_play_screen(previousButtons, currentButtons, &dog_sprite, &play_state);
+      if (result == 1) {
+        state = LOSE;
+      } else if (result == 2) {
+        state = WIN;
+      }
       break;
+    }
+
     case WIN:
 
       // state = ?
       break;
     case LOSE:
-
-      // state = ?
+      reset_screen();
+      state = LOSE_SHOW;
       break;
+    case LOSE_SHOW:
+      draw_lose_screen();
+      if (KEY_DOWN(BUTTON_START, currentButtons) & ~previousButtons) {
+        state = PLAY;
+        drawFullScreenImageDMA(night);
+      }
     }
 
     previousButtons = currentButtons; // Store the current state of the buttons
@@ -55,15 +79,33 @@ int main(void) {
   return 0;
 }
 
+void reset_screen(void) {
+  dog_sprite = default_dog;
+  play_state = default_state;
+  fillScreenDMA(BLACK);
+  for (int i = 0; i < 128; i++) {
+    shadow[i].attr0 = ATTR0_HIDE;
+  }
+}
+
 void draw_welcome_screen(void) {
-  drawImageDMA(HEIGHT - GHOST_HEIGHT, WIDTH - GHOST_WIDTH, GHOST_WIDTH,
-               GHOST_HEIGHT, ghost);
+  drawImageDMA(HEIGHT - OCTOPUS_HEIGHT, WIDTH - OCTOPUS_WIDTH, OCTOPUS_WIDTH,
+               OCTOPUS_HEIGHT, octopus);
   drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "Generic Platformer",
                      0x0fd0); // A nice green
   drawCenteredString(HEIGHT / 2 + 15, WIDTH / 2, 0, 0, "Press Start to Play",
                      0x00ff); // red
 }
 
+void draw_lose_screen(void) {
+  drawImageDMA(HEIGHT - GHOST_HEIGHT, WIDTH - GHOST_WIDTH, GHOST_WIDTH,
+               GHOST_HEIGHT, ghost);
+  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "You Lost :(",
+                     0x0fd0); // A nice green
+  drawCenteredString(HEIGHT / 2 + 15, WIDTH / 2, 0, 0,
+                     "Press Start to Play Again",
+                     0x00ff); // red
+}
 
 void initialize_screen(void) {
   REG_DISPCNT = MODE3 | BG2_ENABLE | OBJ_ENABLE | DOG_DIMENSION_TYPE;
