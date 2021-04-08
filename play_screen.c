@@ -15,6 +15,7 @@ int draw_play_screen(u32 previousButtons, u32 currentButtons,
 
   drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
   drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
+  drawImageDMA(coin3_y, coin3_x, COIN_WIDTH, COIN_HEIGHT, coin);
 
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
     dog->facing = 0;

@@ -32,7 +32,7 @@ u8 right_wall(struct point *start, struct point *end, struct object *obj) {
 
 u8 death_box(struct point *start, struct point *end, struct object *obj);
 u8 death_box(struct point *start, struct point *end, struct object *obj) {
-  if (start->y <= (HEIGHT - 32) && end->y > (HEIGHT - 32)) {
+  if (start->y <= (HEIGHT - 30) && end->y > (HEIGHT - 30)) {
       obj->health = 0;
   }
   return 0;

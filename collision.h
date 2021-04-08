@@ -56,6 +56,9 @@
 #define coin2_x 209
 #define coin2_y 55
 
+#define coin3_x 118
+#define coin3_y 15
+
 struct point {
     int x;
     int y;
