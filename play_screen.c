@@ -1,7 +1,17 @@
 #include "play_screen.h"
+#include "images/night.h"
+#include <stdio.h>
 
 int draw_play_screen(u32 previousButtons, u32 currentButtons,
                      struct object *dog, struct play *state) {
+  char lives[10];
+  sprintf(lives, "Lives: %d", dog->lives);
+  drawString(5, 10, lives, 0x0fd0); // A nice green
+
+  char points[11];
+  sprintf(points, "Points: %d", dog->points);
+  drawString(17, 10, points, 0x0fd0); // A nice green
+
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
     dog->facing = 0;
     dog->dx = 1;
@@ -24,13 +34,14 @@ int draw_play_screen(u32 previousButtons, u32 currentButtons,
   for (int i = 0; i < collision_size; i++) {
     pos_bitmask |= (*collisions[i].action)(&dog->loc, &next_pos, dog);
     drawRectDMA(collisions[i].start.y, collisions[i].start.x,
-                collisions[i].end.x - collisions[i].start.x, 1, WHITE);
+                collisions[i].end.x - collisions[i].start.x, 2, WHITE);
   }
 
   if (dog->health <= 0) {
     if (dog->lives == 1) {
       return 1;
     }
+    undrawString(5, 10, lives, night);
     dog->lives--;
     dog->loc.x = 50;
     dog->loc.y = 150;

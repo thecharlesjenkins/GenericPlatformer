@@ -80,6 +80,23 @@ void drawString(int row, int col, char *str, u16 color) {
   }
 }
 
+void undrawChar(int row, int col, char ch, const u16 *image) {
+  for (int i = 0; i < 6; i++) {
+    for (int j = 0; j < 8; j++) {
+      if (fontdata_6x8[OFFSET(j, i, 6) + ch * 48]) {
+        setPixel(row + j, col + i, image[i * j]);
+      }
+    }
+  }
+}
+
+void undrawString(int row, int col, char *str, const u16 *image) {
+  while (*str) {
+    undrawChar(row, col, *str++, image);
+    col += 6;
+  }
+}
+
 void drawCenteredString(int row, int col, int width, int height, char *str, u16 color) {
   u32 len = 0;
   char *strCpy = str;

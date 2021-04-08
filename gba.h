@@ -69,7 +69,8 @@ extern volatile unsigned short *videoBuffer;
 // Remember that a button is recently pressed if it wasn't pressed in the last
 // input (oldButtons) but is pressed in the current input. Use the KEY_DOWN
 // macro to check if the button was pressed in the inputs.
-#define KEY_JUST_PRESSED(key, buttons, oldbuttons) (KEY_DOWN((key), (buttons)) & (oldbuttons))
+#define KEY_JUST_PRESSED(key, buttons, oldbuttons)                             \
+  (KEY_DOWN((key), (buttons)) & (oldbuttons))
 
 // ---------------------------------------------------------------------------
 //                       DMA
@@ -150,10 +151,12 @@ void drawChar(int row, int col, char ch, u16 color);
 void drawString(int row, int col, char *str, u16 color);
 void drawCenteredString(int row, int col, int width, int height, char *str,
                         u16 color);
+void undrawChar(int row, int col, char ch, const u16 *image);
+void undrawString(int row, int col, char *str, const u16 *image);
 
-/* Contains the pixels of each character from a 6x8 font */
-// This is in the font.c file. You can replace the font if you want.
-extern const unsigned char fontdata_6x8[12288];
+    /* Contains the pixels of each character from a 6x8 font */
+    // This is in the font.c file. You can replace the font if you want.
+    extern const unsigned char fontdata_6x8[12288];
 
 // ---------------------------------------------------------------------------
 //                       SPRITE CONTROL
@@ -180,8 +183,8 @@ extern const unsigned char fontdata_6x8[12288];
 
 // ATTRIBUTE 1
 // Bottom 9 bits control the X coordinate. It is treated as a signed value, so
-// in the case that is is negative the portion of the sprite that’s onscreen will
-// be drawn.
+// in the case that is is negative the portion of the sprite that’s onscreen
+// will be drawn.
 
 // Bits 9-B has to do with Affine Sprites which is beyond the scope of this
 // tutorial.
@@ -226,7 +229,6 @@ typedef struct {
   u16 fill3[3];
   s16 pd;
 } OBJ_AFFINE;
-
 
 typedef struct {
   u16 tileimg[8192];

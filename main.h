@@ -17,7 +17,7 @@ void initialize_screen(void);
 void draw_lose_screen(void);
 void reset_screen(void);
 
-struct object default_dog = {shadow, {50, 150}, 10, 0, 1, 100, 3};
+struct object default_dog = {.sprite = shadow, .loc = {50, 150}, .dy = 10, .dx = 0, .facing = 1, .health = 100, .lives = 3, .points = 0};
 struct play default_state = {0, 0, 5};
 
 int gravity = -1;

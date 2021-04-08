@@ -16,6 +16,7 @@ struct object {
   int facing;
   int health;
   int lives;
+  int points;
 };
 
 /*
