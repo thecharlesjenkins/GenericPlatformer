@@ -1,5 +1,6 @@
 #include "main.h"
 #include "images/octopus.h"
+#include "images/coin.h"
 
 OamEntry shadow[128];
 
@@ -7,6 +8,7 @@ enum gba_state {
   START,
   PLAY,
   WIN,
+  WIN_SHOW,
   LOSE,
   LOSE_SHOW,
 };
@@ -41,10 +43,14 @@ int main(void) {
       if (KEY_DOWN(BUTTON_START, currentButtons) & ~previousButtons) {
         state = PLAY;
         drawFullScreenImageDMA(night);
+        drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin3_y, coin3_x, COIN_WIDTH, COIN_HEIGHT, coin);
       }
       break;
     case PLAY: {
-      int result = draw_play_screen(previousButtons, currentButtons, &dog_sprite, &play_state);
+      int result = draw_play_screen(previousButtons, currentButtons,
+                                    &dog_sprite, &play_state);
       if (result == 1) {
         state = LOSE;
       } else if (result == 2) {
@@ -54,8 +60,18 @@ int main(void) {
     }
 
     case WIN:
-
-      // state = ?
+      reset_screen();
+      state = WIN_SHOW;
+      break;
+    case WIN_SHOW:
+      draw_win_screen();
+      if (KEY_DOWN(BUTTON_START, currentButtons) & ~previousButtons) {
+        state = PLAY;
+        drawFullScreenImageDMA(night);
+        drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin3_y, coin3_x, COIN_WIDTH, COIN_HEIGHT, coin);
+      }
       break;
     case LOSE:
       reset_screen();
@@ -66,6 +82,9 @@ int main(void) {
       if (KEY_DOWN(BUTTON_START, currentButtons) & ~previousButtons) {
         state = PLAY;
         drawFullScreenImageDMA(night);
+        drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
+        drawImageDMA(coin3_y, coin3_x, COIN_WIDTH, COIN_HEIGHT, coin);
       }
     }
 
@@ -101,6 +120,16 @@ void draw_lose_screen(void) {
   drawImageDMA(HEIGHT - GHOST_HEIGHT, WIDTH - GHOST_WIDTH, GHOST_WIDTH,
                GHOST_HEIGHT, ghost);
   drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "You Lost :(",
+                     0x0fd0); // A nice green
+  drawCenteredString(HEIGHT / 2 + 15, WIDTH / 2, 0, 0,
+                     "Press Start to Play Again",
+                     0x00ff); // red
+}
+
+void draw_win_screen(void) {
+  drawImageDMA(HEIGHT - OCTOPUS_HEIGHT, WIDTH - OCTOPUS_WIDTH, OCTOPUS_WIDTH,
+               OCTOPUS_HEIGHT, octopus);
+  drawCenteredString(HEIGHT / 2, WIDTH / 2, 0, 0, "You Won !!!",
                      0x0fd0); // A nice green
   drawCenteredString(HEIGHT / 2 + 15, WIDTH / 2, 0, 0,
                      "Press Start to Play Again",

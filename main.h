@@ -16,6 +16,7 @@ void draw_welcome_screen(void);
 void initialize_screen(void);
 void draw_lose_screen(void);
 void reset_screen(void);
+void draw_win_screen(void);
 
 struct object default_dog = {.sprite = shadow, .loc = {50, 150}, .dy = 10, .dx = 0, .facing = 1, .health = 100, .lives = 3, .points = 0};
 struct play default_state = {0, 0, 5};

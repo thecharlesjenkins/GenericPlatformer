@@ -1,21 +1,16 @@
 #include "play_screen.h"
-#include "images/night.h"
 #include "images/coin.h"
+#include "images/night.h"
 #include <stdio.h>
 
 int draw_play_screen(u32 previousButtons, u32 currentButtons,
                      struct object *dog, struct play *state) {
   char lives[10];
   sprintf(lives, "Lives: %d", dog->lives);
-  drawString(5, 10, lives, 0x0fd0); // A nice green
 
   char points[11];
   sprintf(points, "Points: %d", dog->points);
   drawString(17, 10, points, 0x0fd0); // A nice green
-
-  drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
-  drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
-  drawImageDMA(coin3_y, coin3_x, COIN_WIDTH, COIN_HEIGHT, coin);
 
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
     dog->facing = 0;
@@ -42,9 +37,29 @@ int draw_play_screen(u32 previousButtons, u32 currentButtons,
                 collisions[i].end.x - collisions[i].start.x, 2, WHITE);
   }
 
+  for (int i = 0; i < coins_size; i++) {
+    u8 coin_result = coin_func(&coins[i], &next_pos, dog);
+    if (coin_result) {
+      drawImageDMA(coins[i].pos.y, coins[i].pos.x, COIN_WIDTH, COIN_HEIGHT,
+                   night); //Undraw coins
+      undrawString(17, 10, points, night);
+    }
+  }
+  drawString(5, 10, lives, 0x0fd0); // A nice green
+
+  if (dog->points == 3) {
+    for (int i = 0; i < coins_size; i++) {
+      coins[i].visible = 1;
+    }
+    return 2; // win game
+  }
+
   if (dog->health <= 0) {
     if (dog->lives == 1) {
-      return 1;
+      for (int i = 0; i < coins_size; i++) {
+        coins[i].visible = 1;
+      }
+      return 1; //lose game
     }
     undrawString(5, 10, lives, night);
     dog->lives--;

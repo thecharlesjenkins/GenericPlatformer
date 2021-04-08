@@ -33,7 +33,7 @@ u8 right_wall(struct point *start, struct point *end, struct object *obj) {
 u8 death_box(struct point *start, struct point *end, struct object *obj);
 u8 death_box(struct point *start, struct point *end, struct object *obj) {
   if (start->y <= (HEIGHT - 30) && end->y > (HEIGHT - 30)) {
-      obj->health = 0;
+    obj->health = 0;
   }
   return 0;
 }
@@ -41,9 +41,19 @@ u8 death_box(struct point *start, struct point *end, struct object *obj) {
 u8 ceiling(struct point *start, struct point *end, struct object *obj);
 u8 ceiling(struct point *start, struct point *end, struct object *obj) {
   if (start->y >= 0 && end->y < 0) {
-      obj->dy = 0;
-      obj->loc.y = 0;
-      return (1 << 1) | (1 << 3);
+    obj->dy = 0;
+    obj->loc.y = 0;
+    return (1 << 1) | (1 << 3);
+  }
+  return 0;
+}
+
+u8 coin_func(struct coin_obj *a_coin, struct point *end, struct object *obj) {
+  if (end->x >= a_coin->pos.x - 25 && end->x <= a_coin->pos.x &&
+      end->y >= a_coin->pos.y - 25 && end->y <= a_coin->pos.y && a_coin->visible) {
+      a_coin->visible = 0;
+      obj->points++;
+      return 1;
   }
   return 0;
 }
@@ -114,6 +124,20 @@ u8 platform_9(struct point *start, struct point *end, struct object *obj) {
   return platform(start, end, obj, platform9_left, platform9_right,
                   platform9_floor);
 }
+
+/*
+struct coin_obj {
+  struct point pos;
+  int visible;
+  int visible_last_frame;
+};
+*/
+int coins_size = 3;
+struct coin_obj coins[] = {
+  {{coin1_x, coin1_y}, 1, 1},
+  {{coin2_x, coin2_y}, 1, 1},
+  {{coin3_x, coin3_y}, 1, 1},
+};
 
 /*
 struct collision {

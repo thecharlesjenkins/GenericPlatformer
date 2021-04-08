@@ -10,6 +10,8 @@ extern int gravity;
 extern u32 vBlankCounter;
 extern struct collision collisions[];
 extern int collision_size;
+extern struct coin_obj coins[];
+extern int coins_size;
 
 
 typedef struct play {
