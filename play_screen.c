@@ -1,5 +1,6 @@
 #include "play_screen.h"
 #include "images/night.h"
+#include "images/coin.h"
 #include <stdio.h>
 
 int draw_play_screen(u32 previousButtons, u32 currentButtons,
@@ -11,6 +12,9 @@ int draw_play_screen(u32 previousButtons, u32 currentButtons,
   char points[11];
   sprintf(points, "Points: %d", dog->points);
   drawString(17, 10, points, 0x0fd0); // A nice green
+
+  drawImageDMA(coin1_y, coin1_x, COIN_WIDTH, COIN_HEIGHT, coin);
+  drawImageDMA(coin2_y, coin2_x, COIN_WIDTH, COIN_HEIGHT, coin);
 
   if (KEY_DOWN(BUTTON_LEFT, currentButtons)) {
     dog->facing = 0;

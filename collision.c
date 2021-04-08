@@ -1,37 +1,5 @@
 #include "collision.h"
 
-#define platform1_floor 40
-#define platform1_left 30
-#define platform1_right 90
-
-//Right side of screen lowest
-#define platform2_floor 50
-#define platform2_left 100
-#define platform2_right WIDTH
-
-//Right side of screen, 2nd from bottom
-#define platform3_floor 70
-#define platform3_left 175
-#define platform3_right WIDTH
-
-#define platform4_floor 60
-#define platform4_left 50
-#define platform4_right 95
-
-#define platform5_floor 100
-#define platform5_left 130
-#define platform5_right 172
-
-//Short platform half-way up the right
-#define platform6_floor 125
-#define platform6_left 180
-#define platform6_right 210
-
-//Short platform half-way up the right
-#define platform7_floor 120
-#define platform7_left 90
-#define platform7_right 120
-
 /*
   0
   0
@@ -47,7 +15,7 @@ u8 left_wall(struct point *start, struct point *end, struct object *obj) {
   if (start->x >= 0 && end->x < 0) {
     obj->dx = 0;
     obj->loc.x = 0;
-    return (1) | (1 << 2); // dx and x were set 00001010
+    return (1) | (1 << 2); // dx and x were set 00000101
   }
   return 0; // Nothing was set
 }
@@ -57,7 +25,7 @@ u8 right_wall(struct point *start, struct point *end, struct object *obj) {
   if (start->x <= (WIDTH - 32) && end->x > (WIDTH - 32)) {
     obj->dx = 0;
     obj->loc.x = (WIDTH - 32);
-    return (1) | (1 << 2); // dx and x were set 00001010
+    return (1) | (1 << 2); // dx and x were set 00000101
   }
   return 0; // Nothing was set
 }
@@ -135,6 +103,18 @@ u8 platform_7(struct point *start, struct point *end, struct object *obj) {
                   platform7_floor);
 }
 
+u8 platform_8(struct point *start, struct point *end, struct object *obj);
+u8 platform_8(struct point *start, struct point *end, struct object *obj) {
+  return platform(start, end, obj, platform8_left, platform8_right,
+                  platform8_floor);
+}
+
+u8 platform_9(struct point *start, struct point *end, struct object *obj);
+u8 platform_9(struct point *start, struct point *end, struct object *obj) {
+  return platform(start, end, obj, platform9_left, platform9_right,
+                  platform9_floor);
+}
+
 /*
 struct collision {
     collision_action *action;
@@ -142,7 +122,7 @@ struct collision {
     struct point end;
 };
 */
-int collision_size = 11;
+int collision_size = 13;
 struct collision collisions[] = {
     {left_wall, {0, 0}, {1, 1}},
     {right_wall, {0, 0}, {1, 1}},
@@ -169,4 +149,10 @@ struct collision collisions[] = {
     {platform_7,
      {platform7_left + 32 - 5, (HEIGHT - platform7_floor + 32)},
      {platform7_right + 16 - 5, (HEIGHT + platform7_floor - 32)}},
+    {platform_8,
+     {platform8_left + 32 - 5, (HEIGHT - platform8_floor + 32)},
+     {platform8_right + 16 - 5, (HEIGHT + platform8_floor - 32)}},
+    {platform_9,
+     {platform9_left + 32 - 5, (HEIGHT - platform9_floor + 32)},
+     {platform9_right + 16 - 5, (HEIGHT + platform9_floor - 32)}},
 };

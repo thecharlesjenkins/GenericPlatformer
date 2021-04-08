@@ -3,6 +3,59 @@
 
 #include "gba.h"
 
+#define platform1_floor 40
+#define platform1_left 30
+#define platform1_right 90
+
+//Right side of screen lowest
+#define platform2_floor 50
+#define platform2_left 100
+#define platform2_right WIDTH
+
+//Right side of screen, 2nd from bottom
+#define platform3_floor 70
+#define platform3_left 175
+#define platform3_right WIDTH
+
+// Medium platform in middle of screen, slightly left
+#define platform4_floor 100
+#define platform4_left 50
+#define platform4_right 95
+
+// Medium platform to right of middle of screen
+#define platform5_floor 100
+#define platform5_left 130
+#define platform5_right 172
+
+//Short platform half-way up the right
+#define platform6_floor 125
+#define platform6_left 180
+#define platform6_right 210
+
+//Short platform at middle top
+#define platform7_floor 120
+#define platform7_left 90
+#define platform7_right 120
+
+//Platform on the left bottom
+#define platform8_floor 55
+#define platform8_left -10
+#define platform8_right 30
+
+//Platform on the left, second from bottom
+#define platform9_floor 70
+#define platform9_left  5
+#define platform9_right 50
+
+#define exit_x 95
+#define exit_y 110
+
+#define coin1_x 20
+#define coin1_y 125
+
+#define coin2_x 209
+#define coin2_y 55
+
 struct point {
     int x;
     int y;
